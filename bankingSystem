@@ -1,0 +1,158 @@
+//Code Is as follows.
+package Banking;
+import java.util.Scanner;
+
+	public class BankingSystem{
+
+		public static void main(String[] args) {
+			System.out.println("-----------------------------------------------------------------------");
+			System.out.println("Welcome to PNB Banking Portal");
+			System.out.println("Kindly select the below:-\n1: Existing Customer\n2: New Customer");
+			int choice;
+			BankingSystem obj = new BankingSystem();
+			Scanner sc = new Scanner(System.in);
+			choice = sc.nextInt();
+			switch(choice) {
+			case 1:
+				obj.existingCustomer();
+				break;
+			case 2:
+				obj.newCustomer();
+				break;
+			}
+		}
+		
+		public void existingCustomer() {
+			System.out.println("Enter your account number:");
+			Scanner sc = new Scanner(System.in);
+			int AccNum,ReAccNum;
+			AccNum = sc.nextInt();
+			System.out.println("ReEnter your account number:");
+			ReAccNum = sc.nextInt();
+			//existingCustomer obj1 = new existingCustomer();
+			if(AccNum == ReAccNum) {
+				validCustomer(AccNum);
+			}
+			else {
+				System.out.println("Please enter the details carefully");
+				existingCustomer();
+			}
+		}
+		
+		private void newCustomer() {
+			String phnNumber ;
+			String [] name = new String[5];
+			System.out.println("Enter your name");
+			Scanner sc = new Scanner(System.in);
+			name[0] = sc.nextLine();
+			System.out.println("Enter your phone number");
+			phnNumber = sc.nextLine();
+			if(phnNumber.length() == 10) {
+			System.out.println("We have submitted your details, One of our executive will get in touch with you shortly.");
+			System.out.println("ThankYou");
+			}
+			else {
+				System.out.println("Phone number should be of length 10");
+				newCustomer();
+			}
+		}
+		private void validCustomer(int number) {
+			int Array[]= {1,21,31,41,51};
+			String name[] = {"Chirag Gupta","Aanchal Gupta","Rajeev Gupta","Rashmi Gupta","Shubham Gupta"};
+			
+			int c=10;
+			for(int i=0;i<Array.length;i++) {
+				if(number == Array[i]) {
+					c=i;
+				}
+			}
+				if(c != 10) {
+				System.out.println("Here are your details:");
+				System.out.printf("Account Number: %d\n",Array[c]);
+				System.out.printf("Name: %s\n",name[c]);
+				char Choice ='\0';
+				Bank obj = new Bank(c);// object uss class ka bano jismai hmai method ko call karna hai
+				do {
+					System.out.println("Select the one from below:");
+					System.out.println("A: Check Bank Balance\nB: Deposit Money\nC: Withdraw money\nD: Previous Transaction\nE: Exit");
+					Scanner sc = new Scanner(System.in);
+					Choice = sc.next().charAt(0);
+					switch(Choice) {
+					case 'A' : 
+						int t = obj.bankBalance();
+						System.out.println("Bank Balance: "+t);
+						break;
+						
+					case 'B' :
+						int amt,z;
+						System.out.println("Enter the amount to deposit:");
+						amt = sc.nextInt();
+						if(amt > 0){
+						z = obj.Deposit(amt);
+						}
+						break;
+						
+					case 'C': 
+						int wAmt,x;
+						System.out.println("Enter the amount to withdraw:");
+						wAmt = sc.nextInt();
+						x = obj.withdraw(wAmt);
+						break;
+						
+					case 'D' :
+						int pt;
+						pt = obj.previousTransaction();
+						if(pt > 0) {
+							System.out.println("The previous transaction is of deposition of  "+pt+" rupees");
+						}
+						else {
+							System.out.println("The previous transaction is of withdrwal of  "+Math.abs(pt)+" rupees");
+						}
+						break;
+						
+					case 'E':
+						System.out.println("Thanks for connecting with us");
+						break;
+					
+					default:
+						System.out.println("Please enter a valid choice");
+					}
+				}while(Choice != 'E');
+				}
+				else {
+					System.out.println("You are not an existing Customer.");
+				}
+			
+		}
+	}
+
+	class Bank {
+		int balance[]= {1000,1200,2300,7800,1230};
+		int c,previous;
+		Bank(int ch){
+			c = ch;
+		}
+		int bankBalance() {
+			return balance[c];
+		}
+		int Deposit(int amount) {
+			balance[c] += amount;
+			System.out.println(amount+" is deposited");
+			previous = amount;
+			return 0;
+		}
+		int withdraw(int a) {
+			if(balance[c] < a) {
+				System.out.println("The amount is larger than the available balance "+balance[c]);
+			}
+			else {
+				balance[c] -= a;
+				previous = - a;
+			}
+			return 0;
+		}
+		int previousTransaction() {
+			return previous;
+		}
+	}
+
